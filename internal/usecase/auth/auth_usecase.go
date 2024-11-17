@@ -2,11 +2,14 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/oriastanjung/grpc_server/internal/entities"
 	repository "github.com/oriastanjung/grpc_server/internal/repository/auth"
 	"github.com/oriastanjung/grpc_server/internal/utils"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +41,7 @@ func (usecase *authUseCase) RegisterAdmin(user *entities.User, passwordSalt int)
 	// 3. Hash password untuk keamanan
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), passwordSalt)
 	if err != nil {
-		return errors.New("Failed hashing password")
+		return status.Errorf(codes.Internal, fmt.Sprintf("Error hashing password: %v", err))
 	}
 	user.Password = string(hashedPassword)
 
@@ -52,13 +55,13 @@ func (usecase *authUseCase) LoginAdmin(user *entities.User)(string, error){
 	err:= usecase.authRepo.LoginAdmin(dbUser)
 	if err != nil{
 		if errors.Is(err, gorm.ErrRecordNotFound){
-			return "",errors.New("User Not Found")
+			return "",status.Errorf(codes.NotFound, "User Not Found")
 		}
 		return "",err
 	}
 
 	if dbUser.IsVerified == false{
-		return "",errors.New("User Not Verified")
+		return "",status.Errorf(codes.Unauthenticated, "User Not Verified")
 	}
 
 	if dbUser.Role != string(entities.AdminRole){
@@ -67,12 +70,12 @@ func (usecase *authUseCase) LoginAdmin(user *entities.User)(string, error){
 
 	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
 	if err != nil{
-		return "",errors.New("Password Not Match")
+		return "",status.Errorf(codes.Unauthenticated, "Invalid Password")
 	}
 
 	token,err := utils.GenerateTokenJWT(*user)
 	if err != nil{
-		return "", errors.New("Failed Generate Token")
+		return "", status.Errorf(codes.Internal, fmt.Sprintf("Error : %v",err))
 	}
 	return token,nil
 }
