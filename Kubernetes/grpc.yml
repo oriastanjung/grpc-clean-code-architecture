@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc
+spec:
+  selector:
+    matchLabels:
+      app: grpc
+  template:
+    metadata:
+      labels:
+        app: grpc
+    spec:
+      containers:
+      - name: grpc
+        image: quay.io/omidiyanto/nextjs-grpc:backend
+        envFrom:
+        - secretRef:
+            name: grpc-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 2701
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc
+spec:
+  selector:
+    app: grpc
+  ports:
+  - port: 2701
+    targetPort: 2701
