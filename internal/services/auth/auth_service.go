@@ -9,6 +9,7 @@ import (
 
 type AuthService interface{
 	RegisterAdmin(ctx context.Context, user *entities.User, salt int) error
+	LoginAdmin(ctx context.Context, user *entities.User) (string, error)
 }
 
 type authService struct{
@@ -23,4 +24,8 @@ func NewAuthService(authUseCase usecase.AuthUseCase) AuthService{
 
 func (service *authService) RegisterAdmin(ctx context.Context, user *entities.User,salt int) error {
 	return service.authUseCase.RegisterAdmin(user,salt)
+}
+
+func (service *authService) LoginAdmin(ctx context.Context, user *entities.User) (string, error) {
+	return service.authUseCase.LoginAdmin(user)
 }

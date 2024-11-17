@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AuthServiceRoutes_SignUpAdmin_FullMethodName = "/auth.AuthServiceRoutes/SignUpAdmin"
+	AuthServiceRoutes_LoginAdmin_FullMethodName  = "/auth.AuthServiceRoutes/LoginAdmin"
 )
 
 // AuthServiceRoutesClient is the client API for AuthServiceRoutes service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceRoutesClient interface {
 	SignUpAdmin(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
+	LoginAdmin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
 type authServiceRoutesClient struct {
@@ -47,11 +49,22 @@ func (c *authServiceRoutesClient) SignUpAdmin(ctx context.Context, in *SignUpReq
 	return out, nil
 }
 
+func (c *authServiceRoutesClient) LoginAdmin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_LoginAdmin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceRoutesServer is the server API for AuthServiceRoutes service.
 // All implementations must embed UnimplementedAuthServiceRoutesServer
 // for forward compatibility.
 type AuthServiceRoutesServer interface {
 	SignUpAdmin(context.Context, *SignUpRequest) (*SignUpResponse, error)
+	LoginAdmin(context.Context, *LoginRequest) (*LoginResponse, error)
 	mustEmbedUnimplementedAuthServiceRoutesServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedAuthServiceRoutesServer struct{}
 
 func (UnimplementedAuthServiceRoutesServer) SignUpAdmin(context.Context, *SignUpRequest) (*SignUpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignUpAdmin not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) LoginAdmin(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginAdmin not implemented")
 }
 func (UnimplementedAuthServiceRoutesServer) mustEmbedUnimplementedAuthServiceRoutesServer() {}
 func (UnimplementedAuthServiceRoutesServer) testEmbeddedByValue()                           {}
@@ -104,6 +120,24 @@ func _AuthServiceRoutes_SignUpAdmin_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthServiceRoutes_LoginAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).LoginAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_LoginAdmin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).LoginAdmin(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthServiceRoutes_ServiceDesc is the grpc.ServiceDesc for AuthServiceRoutes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var AuthServiceRoutes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignUpAdmin",
 			Handler:    _AuthServiceRoutes_SignUpAdmin_Handler,
+		},
+		{
+			MethodName: "LoginAdmin",
+			Handler:    _AuthServiceRoutes_LoginAdmin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

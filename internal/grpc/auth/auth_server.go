@@ -46,3 +46,22 @@ func (server *AuthServer) SignUpAdmin(ctx context.Context, input *pb.SignUpReque
 	},nil
 
 }
+
+
+func (server *AuthServer) LoginAdmin(ctx context.Context, input *pb.LoginRequest) (*pb.LoginResponse, error){
+	log.Printf("LoginAdmin Invoked with %v",input)
+
+	token, err := server.authService.LoginAdmin(context.Background(), &entities.User{
+		Email: input.Email,
+		Password: input.Password,
+	})
+	if err != nil{
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Error : %v",err))
+	}
+
+	return &pb.LoginResponse{
+		Message: "Login Admin Successfully",
+		Token: token,
+	},nil
+
+}
