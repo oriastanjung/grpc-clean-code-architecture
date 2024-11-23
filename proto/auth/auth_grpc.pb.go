@@ -19,8 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthServiceRoutes_SignUpAdmin_FullMethodName = "/auth.AuthServiceRoutes/SignUpAdmin"
-	AuthServiceRoutes_LoginAdmin_FullMethodName  = "/auth.AuthServiceRoutes/LoginAdmin"
+	AuthServiceRoutes_SignUpAdmin_FullMethodName           = "/auth.AuthServiceRoutes/SignUpAdmin"
+	AuthServiceRoutes_LoginAdmin_FullMethodName            = "/auth.AuthServiceRoutes/LoginAdmin"
+	AuthServiceRoutes_SignUpUser_FullMethodName            = "/auth.AuthServiceRoutes/SignUpUser"
+	AuthServiceRoutes_LoginUser_FullMethodName             = "/auth.AuthServiceRoutes/LoginUser"
+	AuthServiceRoutes_VerifyUser_FullMethodName            = "/auth.AuthServiceRoutes/VerifyUser"
+	AuthServiceRoutes_RequestForgetPassword_FullMethodName = "/auth.AuthServiceRoutes/RequestForgetPassword"
+	AuthServiceRoutes_ResetPasswordByToken_FullMethodName  = "/auth.AuthServiceRoutes/ResetPasswordByToken"
 )
 
 // AuthServiceRoutesClient is the client API for AuthServiceRoutes service.
@@ -29,6 +34,11 @@ const (
 type AuthServiceRoutesClient interface {
 	SignUpAdmin(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
 	LoginAdmin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	SignUpUser(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
+	LoginUser(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	VerifyUser(ctx context.Context, in *VerifyUserRequest, opts ...grpc.CallOption) (*VerifyUserResponse, error)
+	RequestForgetPassword(ctx context.Context, in *RequestForgetPasswordRequest, opts ...grpc.CallOption) (*RequestForgetPasswordResponse, error)
+	ResetPasswordByToken(ctx context.Context, in *ResetPasswordByTokenRequest, opts ...grpc.CallOption) (*ResetPasswordByTokenResponse, error)
 }
 
 type authServiceRoutesClient struct {
@@ -59,12 +69,67 @@ func (c *authServiceRoutesClient) LoginAdmin(ctx context.Context, in *LoginReque
 	return out, nil
 }
 
+func (c *authServiceRoutesClient) SignUpUser(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignUpResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_SignUpUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceRoutesClient) LoginUser(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_LoginUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceRoutesClient) VerifyUser(ctx context.Context, in *VerifyUserRequest, opts ...grpc.CallOption) (*VerifyUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VerifyUserResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_VerifyUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceRoutesClient) RequestForgetPassword(ctx context.Context, in *RequestForgetPasswordRequest, opts ...grpc.CallOption) (*RequestForgetPasswordResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RequestForgetPasswordResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_RequestForgetPassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceRoutesClient) ResetPasswordByToken(ctx context.Context, in *ResetPasswordByTokenRequest, opts ...grpc.CallOption) (*ResetPasswordByTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResetPasswordByTokenResponse)
+	err := c.cc.Invoke(ctx, AuthServiceRoutes_ResetPasswordByToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceRoutesServer is the server API for AuthServiceRoutes service.
 // All implementations must embed UnimplementedAuthServiceRoutesServer
 // for forward compatibility.
 type AuthServiceRoutesServer interface {
 	SignUpAdmin(context.Context, *SignUpRequest) (*SignUpResponse, error)
 	LoginAdmin(context.Context, *LoginRequest) (*LoginResponse, error)
+	SignUpUser(context.Context, *SignUpRequest) (*SignUpResponse, error)
+	LoginUser(context.Context, *LoginRequest) (*LoginResponse, error)
+	VerifyUser(context.Context, *VerifyUserRequest) (*VerifyUserResponse, error)
+	RequestForgetPassword(context.Context, *RequestForgetPasswordRequest) (*RequestForgetPasswordResponse, error)
+	ResetPasswordByToken(context.Context, *ResetPasswordByTokenRequest) (*ResetPasswordByTokenResponse, error)
 	mustEmbedUnimplementedAuthServiceRoutesServer()
 }
 
@@ -80,6 +145,21 @@ func (UnimplementedAuthServiceRoutesServer) SignUpAdmin(context.Context, *SignUp
 }
 func (UnimplementedAuthServiceRoutesServer) LoginAdmin(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginAdmin not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) SignUpUser(context.Context, *SignUpRequest) (*SignUpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignUpUser not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) LoginUser(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) VerifyUser(context.Context, *VerifyUserRequest) (*VerifyUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyUser not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) RequestForgetPassword(context.Context, *RequestForgetPasswordRequest) (*RequestForgetPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestForgetPassword not implemented")
+}
+func (UnimplementedAuthServiceRoutesServer) ResetPasswordByToken(context.Context, *ResetPasswordByTokenRequest) (*ResetPasswordByTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetPasswordByToken not implemented")
 }
 func (UnimplementedAuthServiceRoutesServer) mustEmbedUnimplementedAuthServiceRoutesServer() {}
 func (UnimplementedAuthServiceRoutesServer) testEmbeddedByValue()                           {}
@@ -138,6 +218,96 @@ func _AuthServiceRoutes_LoginAdmin_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthServiceRoutes_SignUpUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignUpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).SignUpUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_SignUpUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).SignUpUser(ctx, req.(*SignUpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthServiceRoutes_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).LoginUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_LoginUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).LoginUser(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthServiceRoutes_VerifyUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).VerifyUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_VerifyUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).VerifyUser(ctx, req.(*VerifyUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthServiceRoutes_RequestForgetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequestForgetPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).RequestForgetPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_RequestForgetPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).RequestForgetPassword(ctx, req.(*RequestForgetPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthServiceRoutes_ResetPasswordByToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetPasswordByTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceRoutesServer).ResetPasswordByToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthServiceRoutes_ResetPasswordByToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceRoutesServer).ResetPasswordByToken(ctx, req.(*ResetPasswordByTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthServiceRoutes_ServiceDesc is the grpc.ServiceDesc for AuthServiceRoutes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +322,26 @@ var AuthServiceRoutes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginAdmin",
 			Handler:    _AuthServiceRoutes_LoginAdmin_Handler,
+		},
+		{
+			MethodName: "SignUpUser",
+			Handler:    _AuthServiceRoutes_SignUpUser_Handler,
+		},
+		{
+			MethodName: "LoginUser",
+			Handler:    _AuthServiceRoutes_LoginUser_Handler,
+		},
+		{
+			MethodName: "VerifyUser",
+			Handler:    _AuthServiceRoutes_VerifyUser_Handler,
+		},
+		{
+			MethodName: "RequestForgetPassword",
+			Handler:    _AuthServiceRoutes_RequestForgetPassword_Handler,
+		},
+		{
+			MethodName: "ResetPasswordByToken",
+			Handler:    _AuthServiceRoutes_ResetPasswordByToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

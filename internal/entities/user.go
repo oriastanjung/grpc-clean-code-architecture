@@ -34,18 +34,18 @@ func (a *KSUIDArray) Scan(value interface{}) error {
 
 type User struct {
 	ID                  ksuid.KSUID `gorm:"primary_key;not null"`
-	Username            string      `gorm:"not null"`
-	Email               string      `gorm:"unique;not null"`
+	Username            string      `gorm:"not null;index"`
+	Email               string      `gorm:"unique;not null;index"`
 	Password            string      `gorm:"not null"`
-	Role                string      `gorm:"type:text;not null;check:role IN ('admin', 'user')"` // Use CHECK constraint
+	Role                string      `gorm:"type:text;not null;index;check:role IN ('admin', 'user')"` // Use CHECK constraint
 	ProfilePicture      string      `gorm:"default:''"`
 	ProfilePictureUrl   string      `gorm:"default:''"`
 	IsVerified          bool        `gorm:"default:false"`
-	VerificationToken   string      `gorm:"default:''"`
-	ForgetPasswordToken string      `gorm:"default:''"`
+	VerificationToken   string      `gorm:"default:'';index"`
+	ForgetPasswordToken string      `gorm:"default:'';index"`
 	Business            []Business  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	CreatedAt           time.Time   `gorm:"autoCreateTime"`
-	UpdatedAt           time.Time   `gorm:"autoCreateTime"`
+	CreatedAt           time.Time   `gorm:"autoCreateTime;index"`
+	UpdatedAt           time.Time   `gorm:"autoCreateTime;index"`
 }
 
 func NewUser(username, email, password string, role Role) (*User, error) {
