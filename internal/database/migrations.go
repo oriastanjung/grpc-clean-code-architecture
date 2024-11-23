@@ -12,6 +12,8 @@ import (
 func MigrateDB(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&entities.User{}, // tambahkan semua model di sini
+		&entities.Business{}, // tambahkan semua model di sini
+		&entities.Finance{}, // tambahkan semua model di sini
 	)
 
 	if err != nil {

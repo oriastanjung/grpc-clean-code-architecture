@@ -33,18 +33,19 @@ func (a *KSUIDArray) Scan(value interface{}) error {
 }
 
 type User struct {
-	ID                  ksuid.KSUID `gorm:"primary_key;not null" json:"id"`
-	Username            string      `json:"username" gorm:"not null"`
-	Email               string      `json:"email" gorm:"unique;not null"`
-	Password            string      `json:"password" gorm:"not null"`
-	Role                string      `json:"role" gorm:"type:text;not null;check:role IN ('admin', 'user')"` // Use CHECK constraint
-	ProfilePicture      string      `json:"profile_picture" gorm:"default:''"`
-	ProfilePictureUrl   string      `json:"profile_picture_url" gorm:"default:''"`
-	IsVerified          bool        `json:"is_verified" gorm:"default:false"`
-	VerificationToken   string      `json:"verification_token" gorm:"default:''"`
-	ForgetPasswordToken string      `json:"forget_password_token" gorm:"default:''"`
-	CreatedAt           time.Time   `json:"created_at"`
-	UpdatedAt           time.Time   `json:"updated_at"`
+	ID                  ksuid.KSUID `gorm:"primary_key;not null"`
+	Username            string      `gorm:"not null"`
+	Email               string      `gorm:"unique;not null"`
+	Password            string      `gorm:"not null"`
+	Role                string      `gorm:"type:text;not null;check:role IN ('admin', 'user')"` // Use CHECK constraint
+	ProfilePicture      string      `gorm:"default:''"`
+	ProfilePictureUrl   string      `gorm:"default:''"`
+	IsVerified          bool        `gorm:"default:false"`
+	VerificationToken   string      `gorm:"default:''"`
+	ForgetPasswordToken string      `gorm:"default:''"`
+	Business            []Business  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	CreatedAt           time.Time   `gorm:"autoCreateTime"`
+	UpdatedAt           time.Time   `gorm:"autoCreateTime"`
 }
 
 func NewUser(username, email, password string, role Role) (*User, error) {
